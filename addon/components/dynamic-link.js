@@ -10,17 +10,17 @@ export default Ember.Component.extend({
   params: {},
 
   // HTML attributes -- href is defined below.
-  rel: Ember.computed.alias('params.rel'),
-  title: Ember.computed.alias('params.title'),
-  target: Ember.computed.alias('params.target'),
-  tabindex: Ember.computed.alias('params.tabindex'),
-  className: Ember.computed.alias('params.className'),
+  rel: Ember.computed.reads('params.rel'),
+  title: Ember.computed.reads('params.title'),
+  target: Ember.computed.reads('params.target'),
+  tabindex: Ember.computed.reads('params.tabindex'),
+  className: Ember.computed.reads('params.className'),
 
   // Ember link-to style attributes
-  route: Ember.computed.alias('params.route'),
-  model: Ember.computed.alias('params.model'),
-  action: Ember.computed.alias('params.action'),
-  queryParams: Ember.computed.alias('params.queryParams'),
+  route: Ember.computed.reads('params.route'),
+  model: Ember.computed.reads('params.model'),
+  action: Ember.computed.reads('params.action'),
+  queryParams: Ember.computed.reads('params.queryParams'),
 
   // By default, dynamic links on active routes will have class "active", but
   // you can reopen this and set it to blank if you don't like that behavior.
@@ -28,8 +28,8 @@ export default Ember.Component.extend({
 
   // You can set an explicit activeClass like in link-to, as well, which can
   // also be passed in via the params hash.
-  activeClass: Ember.computed.alias('params.activeClass'),
-  activeWhen: Ember.computed.alias('params.activeWhen'),
+  activeClass: Ember.computed.reads('params.activeClass'),
+  activeWhen: Ember.computed.reads('params.activeWhen'),
   activeClassName: Ember.computed('isActive', 'activeClass', 'defaultActiveClass', function() {
     if (this.get('isActive') && this.get('activeClass') !== false) {
       return this.get('activeClass') || this.get('defaultActiveClass');
@@ -39,7 +39,7 @@ export default Ember.Component.extend({
   // You can control whether or not the click event bubbles up through the
   // component by setting this property directly or by setting it in the
   // params hash. If no value is set, all clicks will bubble by default.
-  bubbles: Ember.computed.alias('params.bubbles'),
+  bubbles: Ember.computed.reads('params.bubbles'),
 
   models: Ember.computed('model', function() {
     if (this.get('model') instanceof Array) {
