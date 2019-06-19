@@ -51,10 +51,16 @@ export default Ember.Component.extend({
     }
   }),
 
+  absoluteRoute: Ember.computed('route', function() {
+    const mountPoint = Ember.getOwner(this).mountPoint;
+    let route = this.get('route');
+    return typeof mountPoint === "undefined" ? route : `${mountPoint}.${route}`;
+  }),
+
   // These are the arguments to be passed to `transitionToRoute`. They consist
   // of a route name and then an optional model with optional query params.
-  routeArguments: Ember.computed('route', 'models', 'queryParams', function() {
-    var args = [this.get('route')].concat(this.get('models'));
+  routeArguments: Ember.computed('absoluteRoute', 'models', 'queryParams', function() {
+    var args = [this.get('absoluteRoute')].concat(this.get('models'));
 
     if (this.get('queryParams')) {
       args.push({ queryParams: this.get('queryParams') });
@@ -64,13 +70,9 @@ export default Ember.Component.extend({
   }),
 
   // Arguments suited for routing service
-  routingArguments: Ember.computed('route', 'models', 'queryParams', function() {
-    const mountPoint = Ember.getOwner(this).mountPoint;
-    let route = this.get('route');
-    route = typeof mountPoint === "undefined" ? route : `${mountPoint}.${route}`;
-
+  routingArguments: Ember.computed('absoluteRoute', 'models', 'queryParams', function() {
     return [
-      route,
+      this.get('absoluteRoute'),
       this.get('models'),
       this.get('queryParams') || {}
     ];
@@ -148,7 +150,7 @@ export default Ember.Component.extend({
       if (routing) {
         let currentState = Ember.get(this, '_routing.currentState');
         if (!currentState) { return false; }
-        return routing.isActiveForRoute(this.get('models'), this.get('queryParams') || {}, this.get('route'), currentState, false);
+        return routing.isActiveForRoute(this.get('models'), this.get('queryParams') || {}, this.get('absoluteRoute'), currentState, false);
       } else {
         return this.get('_router').isActive(...this.get('routeArguments'));
       }
