@@ -65,8 +65,12 @@ export default Ember.Component.extend({
 
   // Arguments suited for routing service
   routingArguments: Ember.computed('route', 'models', 'queryParams', function() {
+    const mountPoint = Ember.getOwner(this).mountPoint;
+    let route = this.get('route');
+    route = typeof mountPoint === "undefined" ? route : `${mountPoint}.${route}`;
+
     return [
-      this.get('route'),
+      route,
       this.get('models'),
       this.get('queryParams') || {}
     ];
