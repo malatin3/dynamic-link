@@ -103,21 +103,13 @@ export default Ember.Component.extend({
     if ((this.get('action') || this.get('route')) && !(event.metaKey || event.ctrlKey)) {
       event.preventDefault();
       if (this.get('action')) {
-        this.performAction();
+        this.get('action')();
       } else {
         this.transitionRoute();
       }
       return this.get('bubbles') !== false;
     } else {
       return true;
-    }
-  },
-
-  // bubble the action to wherever the link was added
-  performAction: function() {
-    var target = this.get('_targetObject') || this.get('targetObject');
-    if (target) {
-      target.send(this.get('action'));
     }
   },
 
